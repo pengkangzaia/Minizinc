@@ -1,0 +1,1 @@
+{"assignmentKey":"9iSqjy4vcw","name":"Team Select","moocName":"FIT5216 S1 2020","moocPasswordString":"Submission token","submissionURL":"https://autograder.minizinc.org/api/index.php","solutionAssignments":[],"modelAssignments":[{"id":"eD0Tufjdr0","model":"models/teamselect_array.mzn","name":null},{"id":"UFFljTSH4H","model":"models/teamselect_set.mzn","name":null}]}

@@ -1,0 +1,5 @@
+n = 4*4; 
+d = array2d(1..n,1..n,[ abs(x1-x2) + abs(y1-y2) | x1 in 1..4, y1 in 1..4, x2 in 1..4, y2 in 1..4 ]);
+v = [ 1 | i in 1..n];
+k = 5;
+l = 4;

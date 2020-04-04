@@ -1,0 +1,5 @@
+n = 5*5; 
+d = array2d(1..n,1..n,[ abs(x1-x2) + abs(y1-y2) | x1 in 1..5, y1 in 1..5, x2 in 1..5, y2 in 1..5 ]);
+v = [ i | i in 1..n];
+k = 10;
+l = 5;

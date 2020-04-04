@@ -1,0 +1,1 @@
+{"assignmentKey":"lD04xLHbKl","name":"PowerGen","moocName":"FIT5216 S1 2020","moocPasswordString":"Submission token","submissionURL":"https://autograder.minizinc.org/api/index.php","solutionAssignments":[{"id":"tAYTkHAXib","model":"models/powergen.mzn","data":"data/powergen.dzn","timeout":"60","name":"Powergen"}],"modelAssignments":[]}

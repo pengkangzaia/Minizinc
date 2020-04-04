@@ -1,0 +1,25 @@
+{
+    "builtinSolverConfigs": [
+    ],
+    "openFiles": [
+        "models/smm.mzn",
+        "models/most.mzn",
+        "models/snake.mzn",
+        "models/attempt.mzn"
+    ],
+    "openTab": 0,
+    "projectFiles": [
+        "models/attempt.mzc",
+        "models/attempt.mzn",
+        "models/most.mzc",
+        "models/most.mzn",
+        "models/smm.mzn",
+        "models/snake.mzc",
+        "models/snake.mzn"
+    ],
+    "projectSolverConfigs": [
+    ],
+    "selectedBuiltinConfigId": "org.gecode.gecode",
+    "selectedBuiltinConfigVersion": "6.1.1",
+    "version": 105
+}
