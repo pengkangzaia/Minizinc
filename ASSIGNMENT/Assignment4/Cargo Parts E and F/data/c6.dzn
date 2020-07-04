@@ -1,0 +1,11 @@
+NL = 3;
+CARGO = anon_enum(12);
+size = array1d(CARGO,[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]);
+makespan = 100;
+SHIP = {SH_1,SH_2,SH_3,SH_4,SH_5,SH_6,SH_7,SH_8,SH_9,SH_10,SH_11,SH_12};
+ship = array1d(CARGO,[SH_1,SH_2,SH_3,SH_4,SH_5,SH_6,SH_7,SH_8,SH_9,SH_10,SH_11,SH_12]);
+arrival = array1d(SHIP,[0, 0, 20, 40, 50, 20, 30, 0, 15, 20, 25, 30]);
+len = 3;
+build_time = 4;
+load_time = 2;
+load_speed = 1;

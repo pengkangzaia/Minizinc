@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="d3.min.js"></script>
+</head>
+<style>
+html, body {
+  font: 11px sans-serif;
+  margin: 0; padding: 0;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+</style>
+<body>
+
+<div id="viz"></div>
+<script type="text/javascript">
+
+    var solutions = [], currentSolution = -1;
+
+    function addSolution(json){
+    var dataset = (typeof json == 'string') ? JSON.parse(json) : json;
+        solutions.push(dataset);
+        gotoSolution(solutions.length-1);
+    }
+    window.onresize = function() {
+        if (currentSolution > -1) gotoSolution(currentSolution);
+    };
+    function gotoSolution(solnumber) {
+        currentSolution = solnumber;
+        var solution = solutions[solnumber];
+        var loadSpeed = solution.load_speed;
+        var dataset = solution.piles;
+        
+        // Getter functions for simplicity
+        var loadSpeed = 1; // That's the same in all models?
+        var getStartStack = function(d) { return d['stack']; };
+        var getEndStack = function(d) { return d['endstack']; };
+        var getStartLoad = function(d) { return d['load']; };
+        var getEndLoad = function(d) { return d['finish']; };
+        var getEastend = function(d) { return d['eastend']; };
+        var getWestend = function(d) { return d['westend']; };
+        var getWhich = function(d) { return d['which']; };
+
+        // Intended coordinate system, but window is a little bigger, see below.
+        var outerPaddingX = window.innerWidth * 0.05;
+        var outerPaddingY = window.innerHeight * 0.05;
+        var innerPaddingX = 10;
+        var innerPaddingY = 30;
+        var width = window.innerWidth - outerPaddingX;
+        var height = window.innerHeight - outerPaddingY;
+
+        // Remove old stuff
+        d3.select("#viz").selectAll("*").remove();
+        
+        // Create new canvas
+        var SVG = d3.select("#viz")
+            .append("svg:svg")
+            .attr('width', width)
+            .attr('height', height)
+            .attr("viewBox", -innerPaddingX + " " + -innerPaddingY + " " + (width + innerPaddingX * 2 + outerPaddingX) + " " + (height + innerPaddingY * 2 + outerPaddingY));
+            
+        // Check out what dimensions the data has.
+        var xDomain = d3.extent([].concat( dataset.map(getStartStack), dataset.map(getEndLoad) ));
+        var yDomain = d3.extent([].concat( dataset.map(getEastend)   , dataset.map(getWestend)    ));
+        
+        // Set up scales and axes accordingly.
+        var xScale = d3.scale.linear()
+            .range([0, width]) // The min-max of the screen (SVG viewbox coordinates)
+            .domain(xDomain);  // The min-max of the data
+        var xAxis = d3.svg.axis()
+            .scale(xScale)
+            .orient("bottom");
+    
+        var yScale = d3.scale.linear()
+            .range([0, height])
+            .domain(yDomain);
+        var yAxis = d3.svg.axis()
+            .scale(yScale)
+        .tickFormat(d3.format("d"))
+            .orient("left");
+          
+        // Draw the boxes
+        for (var i = 0; i < dataset.length; i++) {
+            var pile = dataset[i];
+            SVG.append("rect") // Left box (stacking)
+                .attr("width", xScale(getEndStack(pile)) - xScale(getStartStack(pile)))
+                .attr("height", yScale(getEastend(pile)) - yScale(getWestend(pile)))
+                .attr("x", xScale(getStartStack(pile)))
+                .attr("y", yScale(getWestend(pile)))
+                .style("fill", "rgb(0,153,0)")
+                .style("stroke-width", "1")
+                .style("stroke", "rgb(32,32,32)");
+            SVG.append("rect") // Middle box (dwell time)
+                .attr("width", xScale(getStartLoad(pile)) - xScale(getEndStack(pile)))
+                .attr("height", yScale(getEastend(pile)) - yScale(getWestend(pile)))
+                .attr("x", xScale(getEndStack(pile)))
+                .attr("y", yScale(getWestend(pile)))
+                .style("fill", "rgb(0,255,153)")
+                .style("stroke-width", "1")
+                .style("stroke", "rgb(32,32,32)");
+            SVG.append("rect") // Right box (loading)
+                .attr("width", xScale(getEndLoad(pile)) - xScale(getStartLoad(pile)))
+                .attr("height", yScale(getEastend(pile)) - yScale(getWestend(pile)))
+                .attr("x", xScale(getStartLoad(pile)))
+                .attr("y", yScale(getWestend(pile)))
+                .style("fill", "rgb(0,153,204)")
+                .style("stroke-width", "1")
+                .style("stroke", "rgb(32,32,32)");
+                
+            SVG.append("rect") // Strong border around all three
+                .attr("width", xScale(getEndLoad(pile)) - xScale(getStartStack(pile)))
+                .attr("height", yScale(getEastend(pile)) - yScale(getWestend(pile)))
+                .attr("x", xScale(getStartStack(pile)))
+                .attr("y", yScale(getWestend(pile)))
+                .attr("fill", "none")
+                .style("stroke-width", "2")
+                .style("stroke", "rgb(0,0,0)");
+                
+            var yMiddle = yScale((getWestend(pile)+getEastend(pile))/2);
+            SVG.append("text") // Label (number)
+                .attr("x", xScale((getStartStack(pile)+getEndLoad(pile))/2))
+                .attr("y", yScale((getWestend(pile)+getEastend(pile))/2))
+                .text(i+1)
+                .style("font-size","20pt")
+                .style("text-anchor", "middle")
+                .attr("dy", ".3em");
+        }
+        
+        // Draw axes
+        SVG.append("g")
+          .attr("class", "axis")
+          .attr("transform", "translate(0," + height + ")")
+          .call(xAxis)
+          .append("text")
+          .attr("x",width/2)
+          .attr("y",30)
+          .text("Time")
+          .style("text-anchor", "middle");
+
+        SVG.append("g")
+          .attr("class", "axis")
+          .call(yAxis)
+          .append("text")
+          .attr("x",-height/2)
+          .attr("y",-30)
+          .attr("transform", "rotate(-90)")
+          .text("Pad Position")
+          .style("text-anchor", "middle");
+          
+        
+        // Find the number of loaders
+        var numLoaders = d3.max(dataset.map(getWhich));
+        
+        // This will deliver nice colours for the loader lines
+        var loaderColors = d3.scale.linear().domain([1, numLoaders]).range(["red","blue"]);
+        
+        for (var i=1; i<=numLoaders; i++) {
+        
+            // For the ith loader
+            var jobs = dataset
+                .filter(function(pile) { return getWhich(pile) == i; }) // find all its jobs
+                .map(function(pile) { // extract the needed data
+                    return {
+                        start: getStartLoad(pile),
+                        end: getEndLoad(pile),                        
+                        westend: getWestend(pile),
+                        eastend: getEastend(pile)
+                    };
+                })
+                .sort(function(a,b) { return a.start - b.start; }); // sort by time
+                
+            // Draw the path for the loader
+            var prevX = -1;
+            var prevY = -1;
+            jobs.forEach(function(pile) {
+            
+                // Draw a path along the "load" box boundary of the pile/job
+                SVG.append("line")
+                    .attr("x1", xScale(pile.start))
+                    .attr("y1", yScale(pile.westend))
+                    .attr("x2", xScale(pile.end))
+                    .attr("y2", yScale(pile.eastend))
+                    .style("stroke-width", "5")
+                    .style("stroke", loaderColors(i));
+                
+                // Connect the box with the previous one
+                if (prevX != -1) {
+                    // First the loader waits until the latest it can leave
+                    var xLeave = pile.start - loadSpeed * Math.abs(pile.westend - prevY);
+                    SVG.append("line")
+                      .attr("x1",xScale(prevX))
+                      .attr("y1",yScale(prevY))
+                      .attr("x2",xScale(xLeave))
+                      .attr("y2",yScale(prevY))
+                      .style("stroke-width", "5")
+                      .style("stroke", loaderColors(i)); 
+                    // And then it leaves and goes all the way at fastest speed
+                    SVG.append("line")
+                      .attr("x1",xScale(xLeave))
+                      .attr("y1",yScale(prevY))
+                      .attr("x2",xScale(pile.start))
+                      .attr("y2",yScale(pile.westend))
+                      .style("stroke-width", "5")
+                      .style("stroke", loaderColors(i)); 
+                      
+                    /*SVG.append("line") This alternative let's the loader use the whole time and drive slower
+                      .attr("x1",xScale(pile.start))
+                      .attr("y1",yScale(pile.westend))
+                      .attr("x2",xScale(prevX))
+                      .attr("y2",yScale(prevY))
+                      .style("stroke-width", "5")
+                      .style("stroke", loaderColors(i)); */
+                }
+                
+                prevX = pile.end;
+                prevY = pile.eastend;
+            });
+           
+            // At the end of the path, add a text label for the loader' number
+            SVG.append("text")
+              .attr("x", xScale(prevX)+5)
+              .attr("y", yScale(prevY))
+              .text(i)
+              .style("font-size", "16pt")
+              .style("fill", loaderColors(i))
+              .style("text-anchor", "start")
+              .attr("dy", ".3em");            
+            
+            
+        }
+
+        if (solution.obj!==undefined) {
+            var objectiveValue = solution.obj;
+        
+            // Add the objective value label
+            SVG.append("text")
+                  .attr("x", width - 15)
+                  .attr("y", height + 40)
+                  .text("obj: " + objectiveValue)
+                  .style("font-size", "12pt")
+                  .style("fill", "black")
+                  .style("text-anchor", "end");
+        }
+    };
+    
+</script>
+</body>
+</html>

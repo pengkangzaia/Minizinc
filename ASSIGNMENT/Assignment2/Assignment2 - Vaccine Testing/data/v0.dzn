@@ -1,0 +1,18 @@
+VACCINE = { ACOV, RETROV, ANTIFLU };
+
+m = 10;
+age = [BABY, CHILD, YOUTH, ADULT, AGED, YOUTH, BABY, ADULT, ADULT, ANCIENT];
+gender = [MALE, FEMALE, OTHER, MALE, FEMALE, MALE, FEMALE, MALE, MALE, FEMALE];
+health = [GOOD, POOR, GOOD, COMPROMISED, GOOD, GOOD, POOR, POOR, POOR, COMPROMISED];
+exposure = [LOW, HIGH, LOW, AVERAGE, EXTREME, LOW, HIGH, AVERAGE, AVERAGE, AVERAGE];
+size = [10, 35, 10, 100, 46, 60, 18, 145, 170, 12];
+
+minsize = 9;
+age_group_min = [0,0,0,1,0,0,0];
+age_group_max = [1,1,1,2,1,1,1];
+max_people_diff = 20;
+max_share_vaccines = 2;
+
+health_information = [1,2,4];
+exposure_information = [1,2,5,7];
+

@@ -1,0 +1,9 @@
+STAFF = { Alice, Bob, Claire, Don, Edgar, Fritz, Gustav, Heinz, Ian};
+SKILL = { Captain, CoPilot };
+VEHICLE = anon_enum(2);
+salary = [ 10,10,10,8,8,8,6,6,6 ];
+competence = array2d(STAFF,SKILL,[| 1,0 |1,0|1,0|0,1|0,1|0,1|0,1|0,1|0,1|]);
+required_competence = array3d(WEEKS,VEHICLE,SKILL,[ 1 | w in WEEKS, v in VEHICLE, sk in SKILL]);
+n_weeks = 4;
+max_together = 2;
+max_consecutive = 0;
