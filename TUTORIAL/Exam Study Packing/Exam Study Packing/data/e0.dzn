@@ -1,0 +1,9 @@
+TOPIC = { BMATHS, AMATHS, ENGLISH, CHEM, PHYS };
+hours = [2,5,4,3,6];
+m = 2;
+before = [BMATHS,CHEM];
+after  = [AMATHS,PHYS];
+morning = {AMATHS,CHEM};
+D = 5; 
+H = 8;
+HALF = {3,4};

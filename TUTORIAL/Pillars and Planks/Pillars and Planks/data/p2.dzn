@@ -1,0 +1,8 @@
+planks = 4;
+plank_width = [5,8,6,3];
+pillars = 8;
+pillar_height = [2,2,2,2,2,1,1,1];
+pillar_width  = [2,2,2,2,2,1,1,1];
+
+available_width = 20;
+available_height = 10;
