@@ -1,0 +1,9 @@
+PERSON = { Abe, Bob, Cal, Dee, Ed, Fin, Gay, Het, Ida };
+
+couple = [| Abe, Bob
+          | Cal, Dee
+          | Ed, Fin
+          | Het, Ida |];
+          
+rivals = array2d(1..35, 1..2, [ if j = 1 then p1 else p2 endif 
+                | p1 in PERSON, p2 in PERSON where p2 > p1 /\ (p1 != Abe \/ p2 != Ida), j in 1..2 ]);         

@@ -1,0 +1,6 @@
+PERSON = anon_enum(20);
+
+couple = array2d(1..10,1..2, PERSON);
+          
+rivals = array2d(1..45, 1..2, [ if j = 1 then p1 else to_enum(PERSON,p2) endif 
+                | p1 in PERSON where p1 <= 15, p2 in p1+3..p1+5, j in 1..2 ]);         

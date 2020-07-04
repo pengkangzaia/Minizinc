@@ -1,0 +1,12 @@
+PERSON = { Abe, Bob, Cal, Dee, Ed, Fin, Gay, Het };
+
+couple = [| Abe, Bob
+          | Cal, Dee
+          | Ed, Fin |];
+          
+rivals = [| Abe, Cal
+          | Abe, Fin
+          | Bob, Het
+          | Dee, Fin
+          | Dee, Gay
+          | Gay, Het |]          

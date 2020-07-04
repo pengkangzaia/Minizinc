@@ -1,0 +1,6 @@
+
+PERSON = { Alice, Ben, Cat, Del };
+
+age = [16, 18, 21, 27];
+gender = [Female, Male, Female, Female];
+height = [ 150, 152, 161, 157 ];
